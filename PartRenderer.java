@@ -18,7 +18,17 @@ public class PartRenderer {
         GuiRuntime.Part part = new GuiRuntime.Part(); part.id = item.id; part.type = item.type; part.text = item.text; part.detail = item.detail;
         part.x = item.x; part.y = item.y; part.width = item.width; part.height = item.height; part.radius = project.corner(item);
         part.value = item.value; part.checked = item.checked; part.visible = item.visible; part.bold = project.emphasized;
-        part.skin = item.skin; part.icon = item.hasSkin() ? "" : PngAssets.icon(item.icon);
+       part.skin = item.skin;
+
+        boolean hideIcon =
+                PartCatalog.find(item.type).category().equals("Actions")
+                        || item.type.equals("List Item");
+
+        if (item.hasSkin() || hideIcon) {
+            part.icon = "";
+        } else {
+            part.icon = PngAssets.icon(item.icon);
+        } //don't show icon on actions and list comp.
         part.target = item.hasTapTrigger() ? item.target : "";
         part.options = item.options.toArray(new String[0]); part.targets = item.hasOptionTriggers() ? item.optionTargets.toArray(new String[0]) : new String[0];
         part.background = background(item, project); part.foreground = foreground(item, project); part.accent = project.accent(); part.soft = project.soft();
